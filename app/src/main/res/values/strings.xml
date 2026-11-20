@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TapeTransfer</string>
+    <string name="login_headline">Приеми аналогово. Предай цифрово.</string>
+    <string name="login_button">Вход</string>
+    <string name="dashboard_title">Табло</string>
+    <string name="dashboard_greeting">Добре дошъл</string>
+    <string name="dashboard_empty_title">Още няма приети касети</string>
+    <string name="dashboard_empty_text">Тук ще се появяват поръчките</string>
+    <string name="cd_logo">Лого на TapeTransfer</string>
 </resources>

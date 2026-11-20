@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="ink">#111113</color>
+    <color name="ink_secondary">#5C5C63</color>
+    <color name="lime">#D4FF4F</color>
+    <color name="background_light">#F6F6F3</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_variant_light">#EFEFEA</color>
+    <color name="outline_light">#C9C9C2</color>
+    <color name="outline_variant_light">#E4E4DF</color>
+    <color name="error">#B3261E</color>
+    <color name="white">#FFFFFF</color>
 </resources>

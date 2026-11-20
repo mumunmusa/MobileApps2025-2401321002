@@ -1,9 +1,75 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.TapeTransfer" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.TapeTransfer" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/ink</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/lime</item>
+        <item name="colorOnPrimaryContainer">@color/ink</item>
+        <item name="colorSecondary">@color/ink</item>
+        <item name="colorOnSecondary">@color/lime</item>
+        <item name="colorSecondaryContainer">@color/ink</item>
+        <item name="colorOnSecondaryContainer">@color/lime</item>
+        <item name="colorError">@color/error</item>
+
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorOnBackground">@color/ink</item>
+        <item name="colorSurface">@color/background_light</item>
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorOnSurfaceVariant">@color/ink_secondary</item>
+        <item name="colorSurfaceContainerLowest">@color/surface_light</item>
+        <item name="colorSurfaceContainerLow">@color/surface_light</item>
+        <item name="colorSurfaceContainer">@color/surface_light</item>
+        <item name="colorSurfaceContainerHigh">@color/surface_variant_light</item>
+        <item name="colorOutline">@color/outline_light</item>
+        <item name="colorOutlineVariant">@color/outline_variant_light</item>
+
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.TapeTransfer.Small</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.TapeTransfer.Medium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.TapeTransfer.Large</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.TapeTransfer" parent="Base.Theme.TapeTransfer" />
+
+    <style name="ShapeAppearance.TapeTransfer.Small" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.TapeTransfer.Medium" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.TapeTransfer.Large" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="Widget.TapeTransfer.Button.Lime" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/lime</item>
+        <item name="android:textColor">@color/ink</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">58dp</item>
+        <item name="cornerRadius">18dp</item>
+    </style>
+
+    <style name="TextAppearance.TapeTransfer.Headline" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textColor">@color/ink</item>
+    </style>
+
+    <style name="TextAppearance.TapeTransfer.Title" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:textColor">@color/ink</item>
+    </style>
+
 </resources>
