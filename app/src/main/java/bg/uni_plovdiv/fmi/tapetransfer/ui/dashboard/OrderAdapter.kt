@@ -1,0 +1,68 @@
+package bg.uni_plovdiv.fmi.tapetransfer.ui.dashboard
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import bg.uni_plovdiv.fmi.tapetransfer.R
+import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
+import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
+import bg.uni_plovdiv.fmi.tapetransfer.databinding.ItemOrderBinding
+import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+
+class OrderAdapter : ListAdapter<TapeOrderEntity, OrderAdapter.OrderViewHolder>(OrderDiffCallback) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
+        val binding = ItemOrderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return OrderViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    class OrderViewHolder(private val binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(order: TapeOrderEntity) {
+            val context = binding.root.context
+
+            binding.textClient.text = order.clientName
+            binding.textMeta.text = context.getString(
+                R.string.order_meta,
+                Formatters.formatOrderNumber(order.id),
+                order.outputFormat.displayName,
+                order.durationMinutes,
+            )
+            binding.textMedia.text = order.mediaType.displayName
+            binding.textStatus.text = order.status.displayName
+            binding.textPrice.text = Formatters.formatPrice(order.price)
+
+            val filledSegments = when (order.status) {
+                OrderStatus.PENDING -> 1
+                OrderStatus.IN_PROGRESS -> 2
+                OrderStatus.DONE -> 3
+            }
+            colorSegment(binding.segment1, filledSegments >= 1)
+            colorSegment(binding.segment2, filledSegments >= 2)
+            colorSegment(binding.segment3, filledSegments >= 3)
+        }
+
+        private fun colorSegment(segment: View, filled: Boolean) {
+            val colorRes = if (filled) R.color.ink else R.color.outline_variant_light
+            segment.background.mutate().setTint(ContextCompat.getColor(segment.context, colorRes))
+        }
+    }
+
+    object OrderDiffCallback : DiffUtil.ItemCallback<TapeOrderEntity>() {
+        override fun areItemsTheSame(oldItem: TapeOrderEntity, newItem: TapeOrderEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: TapeOrderEntity, newItem: TapeOrderEntity): Boolean {
+            return oldItem == newItem
+        }
+    }
+}

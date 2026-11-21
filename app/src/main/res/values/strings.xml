@@ -3,9 +3,8 @@
     <string name="login_headline">Приеми аналогово. Предай цифрово.</string>
     <string name="login_button">Вход</string>
     <string name="dashboard_title">Табло</string>
-    <string name="dashboard_greeting">Добре дошъл</string>
+    <string name="dashboard_greeting">Здравей, %1$s</string>
     <string name="dashboard_empty_title">Още няма приети касети</string>
-    <string name="dashboard_empty_text">Тук ще се появяват поръчките</string>
     <string name="cd_logo">Лого на TapeTransfer</string>
     <string name="login_username">Потребител</string>
     <string name="login_password">Парола</string>
@@ -28,4 +27,16 @@
     <string name="error_invalid_password">Паролата трябва да е поне 6 символа, с буква и цифра</string>
     <string name="error_passwords_mismatch">Паролите не съвпадат</string>
     <string name="error_username_taken">Това потребителско име е заето</string>
+    <string name="dashboard_active">Активни касети</string>
+    <string name="dashboard_active_details">%1$d чакащи · %2$d в процес</string>
+    <string name="dashboard_revenue">Оборот</string>
+    <string name="dashboard_done">Готови</string>
+    <string name="dashboard_new_order">Нова касета</string>
+    <string name="dashboard_empty_filter">Няма поръчки с този статус</string>
+    <string name="filter_all">Всички</string>
+    <string name="filter_pending">Чакащи</string>
+    <string name="filter_in_progress">В процес</string>
+    <string name="filter_done">Готови</string>
+    <string name="order_meta">%1$s · → %2$s · %3$d мин</string>
+    <string name="cd_profile">Профил</string>
 </resources>
