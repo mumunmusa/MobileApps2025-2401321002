@@ -7,4 +7,25 @@
     <string name="dashboard_empty_title">Още няма приети касети</string>
     <string name="dashboard_empty_text">Тук ще се появяват поръчките</string>
     <string name="cd_logo">Лого на TapeTransfer</string>
+    <string name="login_username">Потребител</string>
+    <string name="login_password">Парола</string>
+    <string name="login_in_progress">Влизане…</string>
+    <string name="login_no_account">Нов служител?</string>
+    <string name="login_register_link">Регистрация</string>
+    <string name="register_title">Нов служител</string>
+    <string name="register_subtitle">След регистрация администратор трябва да одобри акаунта ти.</string>
+    <string name="register_full_name">Име и фамилия</string>
+    <string name="register_username_helper">Поне 3 символа, латиница и цифри</string>
+    <string name="register_password_helper">Поне 6 символа, буква и цифра</string>
+    <string name="register_confirm_password">Повтори паролата</string>
+    <string name="register_button">Регистрация</string>
+    <string name="register_success">Регистрацията е изпратена. Изчакай одобрение от администратор.</string>
+    <string name="cd_back">Назад</string>
+    <string name="error_empty_fields">Попълни всички полета</string>
+    <string name="error_invalid_credentials">Грешен потребител или парола</string>
+    <string name="error_not_approved">Акаунтът ти чака одобрение от администратор</string>
+    <string name="error_invalid_username">Невалидно потребителско име</string>
+    <string name="error_invalid_password">Паролата трябва да е поне 6 символа, с буква и цифра</string>
+    <string name="error_passwords_mismatch">Паролите не съвпадат</string>
+    <string name="error_username_taken">Това потребителско име е заето</string>
 </resources>

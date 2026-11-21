@@ -13,7 +13,15 @@
             app:destination="@id/dashboardFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.register.RegisterFragment"
+        android:label="@string/register_title" />
 
     <fragment
         android:id="@+id/dashboardFragment"
