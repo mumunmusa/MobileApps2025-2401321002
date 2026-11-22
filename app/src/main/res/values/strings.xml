@@ -70,4 +70,22 @@
     <string name="detail_notes">Бележки</string>
     <string name="detail_format_value">→ %1$s</string>
     <string name="detail_unknown_user">неизвестен</string>
+    <string name="cancel">Отказ</string>
+    <string name="detail_delete">Изтрий поръчката</string>
+    <string name="delete_title">Изтриване на поръчка</string>
+    <string name="delete_message">Поръчка %1$s на %2$s ще бъде изтрита завинаги.</string>
+    <string name="delete_confirm">Изтрий</string>
+    <string name="order_deleted">Поръчката е изтрита</string>
+    <string name="orders_active_title">Активни касети</string>
+    <string name="orders_done_title">Готови поръчки</string>
+    <string name="orders_count">%1$d поръчки</string>
+    <string name="orders_active_empty">Няма активни касети</string>
+    <string name="orders_done_empty">Още няма готови поръчки</string>
+    <string name="revenue_title">Оборот</string>
+    <string name="revenue_month">Този месец</string>
+    <string name="revenue_year">Тази година</string>
+    <string name="revenue_total">Общо</string>
+    <string name="revenue_by_month">По месеци</string>
+    <string name="revenue_month_orders">%1$d готови поръчки</string>
+    <string name="revenue_empty">Още няма завършени поръчки</string>
 </resources>

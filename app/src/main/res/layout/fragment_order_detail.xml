@@ -335,5 +335,15 @@
             app:iconGravity="textStart"
             app:iconTint="@color/ink" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonDelete"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/detail_delete"
+            android:textColor="?attr/colorError"
+            android:visibility="gone" />
+
     </LinearLayout>
 </ScrollView>

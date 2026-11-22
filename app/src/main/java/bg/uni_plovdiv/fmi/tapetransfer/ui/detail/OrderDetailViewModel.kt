@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
+import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.UserRole
 import bg.uni_plovdiv.fmi.tapetransfer.data.repository.AuthRepository
 import bg.uni_plovdiv.fmi.tapetransfer.data.repository.TapeOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,10 +30,30 @@ class OrderDetailViewModel @Inject constructor(
     private val _acceptedBy = MutableStateFlow<String?>(null)
     val acceptedBy: StateFlow<String?> = _acceptedBy
 
+    private val _isAdmin = MutableStateFlow(false)
+    val isAdmin: StateFlow<Boolean> = _isAdmin
+
+    private val _isDeleted = MutableStateFlow(false)
+    val isDeleted: StateFlow<Boolean> = _isDeleted
+
+    init {
+        viewModelScope.launch {
+            _isAdmin.value = authRepository.getCurrentUser()?.role == UserRole.ADMIN
+        }
+    }
+
     fun loadAcceptedBy(userId: Int?) {
         if (userId == null || _acceptedBy.value != null) return
         viewModelScope.launch {
             _acceptedBy.value = authRepository.getUserById(userId)?.fullName
+        }
+    }
+
+    fun deleteOrder() {
+        val current = order.value ?: return
+        viewModelScope.launch {
+            orderRepository.delete(current)
+            _isDeleted.value = true
         }
     }
 

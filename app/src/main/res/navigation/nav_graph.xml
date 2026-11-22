@@ -33,7 +33,31 @@
         <action
             android:id="@+id/action_dashboard_to_orderDetail"
             app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_ordersList"
+            app:destination="@id/ordersListFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_revenue"
+            app:destination="@id/revenueFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/ordersListFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.orders.OrdersListFragment"
+        android:label="@string/orders_active_title">
+        <argument
+            android:name="showDone"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_ordersList_to_orderDetail"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/revenueFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.revenue.RevenueFragment"
+        android:label="@string/revenue_title" />
 
     <fragment
         android:id="@+id/orderDetailFragment"

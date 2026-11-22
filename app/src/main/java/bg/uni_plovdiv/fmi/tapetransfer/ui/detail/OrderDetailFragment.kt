@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.FragmentOrderDetailBinding
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,6 +50,7 @@ class OrderDetailFragment : Fragment() {
         }
 
         binding.buttonNextStep.setOnClickListener { viewModel.moveToNextStatus() }
+        binding.buttonDelete.setOnClickListener { confirmDelete() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,6 +61,19 @@ class OrderDetailFragment : Fragment() {
                 }
                 launch {
                     viewModel.acceptedBy.collect { showAcceptedBy() }
+                }
+                launch {
+                    viewModel.isAdmin.collect { isAdmin ->
+                        binding.buttonDelete.visibility = if (isAdmin) View.VISIBLE else View.GONE
+                    }
+                }
+                launch {
+                    viewModel.isDeleted.collect { isDeleted ->
+                        if (isDeleted) {
+                            Toast.makeText(requireContext(), R.string.order_deleted, Toast.LENGTH_SHORT).show()
+                            findNavController().popBackStack()
+                        }
+                    }
                 }
             }
         }
@@ -108,6 +124,16 @@ class OrderDetailFragment : Fragment() {
         }
 
         showAcceptedBy()
+    }
+
+    private fun confirmDelete() {
+        val order = viewModel.order.value ?: return
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.delete_title)
+            .setMessage(getString(R.string.delete_message, Formatters.formatOrderNumber(order.id), order.clientName))
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.delete_confirm) { _, _ -> viewModel.deleteOrder() }
+            .show()
     }
 
     private fun showAcceptedBy() {

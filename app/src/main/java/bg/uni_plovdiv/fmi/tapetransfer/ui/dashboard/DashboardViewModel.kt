@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.data.repository.AuthRepository
-import bg.uni_plovdiv.fmi.tapetransfer.data.repository.OrderSummary
+import bg.uni_plovdiv.fmi.tapetransfer.data.repository.RevenuePeriod
 import bg.uni_plovdiv.fmi.tapetransfer.data.repository.TapeOrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +18,11 @@ import javax.inject.Inject
 
 data class DashboardUiState(
     val orders: List<TapeOrderEntity> = emptyList(),
-    val summary: OrderSummary = OrderSummary(activeCount = 0, doneCount = 0, totalRevenue = 0.0),
+    val activeCount: Int = 0,
     val pendingCount: Int = 0,
     val inProgressCount: Int = 0,
+    val doneCount: Int = 0,
+    val monthRevenue: Double = 0.0,
     val selectedFilter: OrderStatus? = null,
 )
 
@@ -38,11 +40,14 @@ class DashboardViewModel @Inject constructor(
     val uiState: StateFlow<DashboardUiState> =
         combine(orderRepository.allOrders, selectedFilter) { orders, filter ->
             val visibleOrders = if (filter == null) orders else orders.filter { it.status == filter }
+            val monthSummary = TapeOrderRepository.calculateSummary(orders, RevenuePeriod.MONTH)
             DashboardUiState(
                 orders = visibleOrders,
-                summary = TapeOrderRepository.calculateSummary(orders),
+                activeCount = monthSummary.activeCount,
                 pendingCount = orders.count { it.status == OrderStatus.PENDING },
                 inProgressCount = orders.count { it.status == OrderStatus.IN_PROGRESS },
+                doneCount = orders.count { it.status == OrderStatus.DONE },
+                monthRevenue = monthSummary.totalRevenue,
                 selectedFilter = filter,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DashboardUiState())

@@ -46,6 +46,11 @@ class DashboardFragment : Fragment() {
         binding.recyclerOrders.adapter = adapter
 
         binding.fabNewOrder.setOnClickListener { openOrderForm(-1) }
+        binding.cardActive.setOnClickListener { openOrdersList(showDone = false) }
+        binding.cardDone.setOnClickListener { openOrdersList(showDone = true) }
+        binding.cardRevenue.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboard_to_revenue)
+        }
 
         binding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
             val status = when (checkedIds.firstOrNull()) {
@@ -69,6 +74,12 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun openOrdersList(showDone: Boolean) {
+        val args = Bundle()
+        args.putBoolean("showDone", showDone)
+        findNavController().navigate(R.id.action_dashboard_to_ordersList, args)
+    }
+
     private fun openOrderDetail(orderId: Int) {
         val args = Bundle()
         args.putInt("orderId", orderId)
@@ -82,14 +93,15 @@ class DashboardFragment : Fragment() {
     }
 
     private fun render(state: DashboardUiState) {
-        binding.textActiveCount.text = state.summary.activeCount.toString()
+        binding.textActiveCount.text = state.activeCount.toString()
         binding.textActiveDetails.text = getString(
             R.string.dashboard_active_details,
             state.pendingCount,
             state.inProgressCount,
         )
-        binding.textRevenue.text = Formatters.formatPrice(state.summary.totalRevenue)
-        binding.textDoneCount.text = state.summary.doneCount.toString()
+        binding.textRevenue.text = Formatters.formatPrice(state.monthRevenue)
+        binding.textPeriod.text = Formatters.formatMonth(System.currentTimeMillis())
+        binding.textDoneCount.text = state.doneCount.toString()
 
         adapter.submitList(state.orders)
 

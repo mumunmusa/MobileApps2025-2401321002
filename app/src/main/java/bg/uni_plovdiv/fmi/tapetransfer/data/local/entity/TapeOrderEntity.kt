@@ -29,4 +29,5 @@ data class TapeOrderEntity(
     val notes: String = "",
     val createdByUserId: Int? = null,
     val createdAt: Long = System.currentTimeMillis(),
+    val completedAt: Long? = null,
 )

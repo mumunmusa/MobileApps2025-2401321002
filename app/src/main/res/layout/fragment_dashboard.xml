@@ -56,14 +56,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="168dp"
+                android:layout_height="184dp"
                 android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardActive"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/lime"
                     app:cardCornerRadius="24dp"
@@ -112,10 +115,13 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardRevenue"
                         style="@style/Widget.Material3.CardView.Outlined"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_marginBottom="5dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_weight="1"
                         app:cardBackgroundColor="?attr/colorSurfaceContainerLowest"
                         app:cardCornerRadius="24dp"
@@ -129,28 +135,46 @@
                             android:paddingStart="16dp"
                             android:paddingEnd="16dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/dashboard_revenue"
-                                android:textColor="?attr/colorOnSurfaceVariant"
-                                android:textSize="13sp" />
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/dashboard_revenue"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/textRevenue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="?attr/colorOnSurface"
-                                android:textSize="24sp"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textPeriod"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="11sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardDone"
                         style="@style/Widget.Material3.CardView.Outlined"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_marginTop="5dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:layout_weight="1"
                         app:cardBackgroundColor="?attr/colorSurfaceContainerLowest"
                         app:cardCornerRadius="24dp"

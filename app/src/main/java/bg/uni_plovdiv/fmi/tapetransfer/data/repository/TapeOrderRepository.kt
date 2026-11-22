@@ -5,8 +5,22 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
+
+enum class RevenuePeriod {
+    MONTH,
+    YEAR,
+    ALL,
+}
+
+data class MonthRevenue(
+    val year: Int,
+    val month: Int,
+    val orderCount: Int,
+    val total: Double,
+)
 
 data class OrderSummary(
     val activeCount: Int,
@@ -35,7 +49,8 @@ class TapeOrderRepository @Inject constructor(
 
     suspend fun moveToNextStatus(order: TapeOrderEntity) {
         val next = nextStatus(order.status) ?: return
-        dao.update(order.copy(status = next))
+        val completedAt = if (next == OrderStatus.DONE) System.currentTimeMillis() else order.completedAt
+        dao.update(order.copy(status = next, completedAt = completedAt))
     }
 
     companion object {
@@ -48,14 +63,55 @@ class TapeOrderRepository @Inject constructor(
             }
         }
 
-        fun calculateSummary(orders: List<TapeOrderEntity>): OrderSummary {
+        fun calculateSummary(
+            orders: List<TapeOrderEntity>,
+            period: RevenuePeriod = RevenuePeriod.ALL,
+            now: Long = System.currentTimeMillis(),
+        ): OrderSummary {
             val active = orders.count { it.status != OrderStatus.DONE }
-            val done = orders.filter { it.status == OrderStatus.DONE }
+            val done = orders.filter { it.status == OrderStatus.DONE && isInPeriod(it, period, now) }
             return OrderSummary(
                 activeCount = active,
                 doneCount = done.size,
                 totalRevenue = done.sumOf { it.price },
             )
+        }
+
+        fun isInPeriod(order: TapeOrderEntity, period: RevenuePeriod, now: Long): Boolean {
+            if (period == RevenuePeriod.ALL) return true
+
+            val orderDate = Calendar.getInstance()
+            orderDate.timeInMillis = order.completedAt ?: order.createdAt
+            val today = Calendar.getInstance()
+            today.timeInMillis = now
+
+            val sameYear = orderDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+            val sameMonth = orderDate.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+
+            return when (period) {
+                RevenuePeriod.MONTH -> sameYear && sameMonth
+                RevenuePeriod.YEAR -> sameYear
+                RevenuePeriod.ALL -> true
+            }
+        }
+
+        fun revenueByMonth(orders: List<TapeOrderEntity>): List<MonthRevenue> {
+            val doneOrders = orders.filter { it.status == OrderStatus.DONE }
+            val groups = doneOrders.groupBy { order ->
+                val date = Calendar.getInstance()
+                date.timeInMillis = order.completedAt ?: order.createdAt
+                Pair(date.get(Calendar.YEAR), date.get(Calendar.MONTH))
+            }
+            return groups
+                .map { (key, monthOrders) ->
+                    MonthRevenue(
+                        year = key.first,
+                        month = key.second,
+                        orderCount = monthOrders.size,
+                        total = monthOrders.sumOf { it.price },
+                    )
+                }
+                .sortedWith(compareByDescending<MonthRevenue> { it.year }.thenByDescending { it.month })
         }
 
         fun filterByQuery(orders: List<TapeOrderEntity>, query: String): List<TapeOrderEntity> {
