@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.FragmentOrderDetailBinding
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+import bg.uni_plovdiv.fmi.tapetransfer.util.LabelPrinter
+import bg.uni_plovdiv.fmi.tapetransfer.util.QrCodeGenerator
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -51,6 +54,7 @@ class OrderDetailFragment : Fragment() {
 
         binding.buttonNextStep.setOnClickListener { viewModel.moveToNextStatus() }
         binding.buttonDelete.setOnClickListener { confirmDelete() }
+        binding.cardQrLabel.setOnClickListener { showLargeQr() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -107,6 +111,8 @@ class OrderDetailFragment : Fragment() {
             binding.textNotes.text = order.notes
         }
 
+        showQrLabel(order)
+
         when (order.status) {
             OrderStatus.PENDING -> {
                 binding.buttonNextStep.visibility = View.VISIBLE
@@ -124,6 +130,35 @@ class OrderDetailFragment : Fragment() {
         }
 
         showAcceptedBy()
+    }
+
+    private fun showQrLabel(order: TapeOrderEntity) {
+        val content = QrCodeGenerator.buildContent(order)
+        binding.imageQr.setImageBitmap(QrCodeGenerator.generate(content, QR_SMALL_SIZE))
+        binding.textQrNumber.text = Formatters.formatOrderNumber(order.id)
+        binding.textQrInfo.text = getString(
+            R.string.qr_label_info,
+            order.mediaType.displayName,
+            order.outputFormat.displayName,
+        )
+    }
+
+    private fun showLargeQr() {
+        val order = viewModel.order.value ?: return
+        val content = QrCodeGenerator.buildContent(order)
+
+        val imageView = ImageView(requireContext())
+        imageView.setImageBitmap(QrCodeGenerator.generate(content, QR_LARGE_SIZE))
+        imageView.adjustViewBounds = true
+        val padding = resources.getDimensionPixelSize(R.dimen.qr_dialog_padding)
+        imageView.setPadding(padding, padding, padding, padding)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.qr_dialog_title, Formatters.formatOrderNumber(order.id)))
+            .setView(imageView)
+            .setNegativeButton(R.string.close, null)
+            .setPositiveButton(R.string.qr_print) { _, _ -> LabelPrinter.print(requireActivity(), order) }
+            .show()
     }
 
     private fun confirmDelete() {
@@ -154,5 +189,10 @@ class OrderDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val QR_SMALL_SIZE = 360
+        private const val QR_LARGE_SIZE = 900
     }
 }

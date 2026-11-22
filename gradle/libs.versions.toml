@@ -19,6 +19,7 @@ coroutines = "1.10.2"
 fragmentKtx = "1.8.9"
 zxing = "3.5.3"
 leakcanary = "2.14"
+print = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
+androidx-print = { group = "androidx.print", name = "print", version.ref = "print" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

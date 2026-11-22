@@ -88,4 +88,11 @@
     <string name="revenue_by_month">По месеци</string>
     <string name="revenue_month_orders">%1$d готови поръчки</string>
     <string name="revenue_empty">Още няма завършени поръчки</string>
+    <string name="qr_label_title">QR ЕТИКЕТ</string>
+    <string name="qr_label_hint">Докосни за голям размер</string>
+    <string name="qr_dialog_title">Етикет %1$s</string>
+    <string name="close">Затвори</string>
+    <string name="cd_qr_code">QR код на поръчката</string>
+    <string name="qr_label_info">%1$s → %2$s</string>
+    <string name="qr_print">Печат</string>
 </resources>

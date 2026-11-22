@@ -74,6 +74,7 @@ dependencies {
 
     // QR code generation
     implementation(libs.zxing.core)
+    implementation(libs.androidx.print)
 
     // Memory leak detection (debug builds only)
     debugImplementation(libs.leakcanary)
