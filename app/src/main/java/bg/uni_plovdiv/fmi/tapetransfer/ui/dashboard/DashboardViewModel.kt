@@ -56,4 +56,10 @@ class DashboardViewModel @Inject constructor(
     fun selectFilter(status: OrderStatus?) {
         selectedFilter.value = status
     }
+
+    fun moveToNextStatus(order: TapeOrderEntity) {
+        viewModelScope.launch {
+            orderRepository.moveToNextStatus(order)
+        }
+    }
 }

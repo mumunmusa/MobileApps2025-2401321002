@@ -33,7 +33,20 @@ class TapeOrderRepository @Inject constructor(
 
     suspend fun delete(order: TapeOrderEntity) = dao.delete(order)
 
+    suspend fun moveToNextStatus(order: TapeOrderEntity) {
+        val next = nextStatus(order.status) ?: return
+        dao.update(order.copy(status = next))
+    }
+
     companion object {
+
+        fun nextStatus(status: OrderStatus): OrderStatus? {
+            return when (status) {
+                OrderStatus.PENDING -> OrderStatus.IN_PROGRESS
+                OrderStatus.IN_PROGRESS -> OrderStatus.DONE
+                OrderStatus.DONE -> null
+            }
+        }
 
         fun calculateSummary(orders: List<TapeOrderEntity>): OrderSummary {
             val active = orders.count { it.status != OrderStatus.DONE }

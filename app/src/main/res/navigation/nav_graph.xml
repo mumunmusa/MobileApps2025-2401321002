@@ -26,6 +26,35 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.dashboard.DashboardFragment"
-        android:label="@string/dashboard_title" />
+        android:label="@string/dashboard_title">
+        <action
+            android:id="@+id/action_dashboard_to_addEditOrder"
+            app:destination="@id/addEditOrderFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_orderDetail"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.detail.OrderDetailFragment"
+        android:label="@string/detail_title">
+        <argument
+            android:name="orderId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_orderDetail_to_addEditOrder"
+            app:destination="@id/addEditOrderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditOrderFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.order.AddEditOrderFragment"
+        android:label="@string/order_new_title">
+        <argument
+            android:name="orderId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

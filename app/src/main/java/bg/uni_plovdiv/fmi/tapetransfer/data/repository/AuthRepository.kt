@@ -40,6 +40,10 @@ class AuthRepository @Inject constructor(
         return userDao.observeById(userId).first()
     }
 
+    suspend fun getUserById(userId: Int): UserEntity? {
+        return userDao.observeById(userId).first()
+    }
+
     suspend fun login(username: String, password: String): LoginResult {
         val user = userDao.getByUsername(username.trim()) ?: return LoginResult.INVALID_CREDENTIALS
 

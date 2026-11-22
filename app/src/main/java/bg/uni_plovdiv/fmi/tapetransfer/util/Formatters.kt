@@ -1,7 +1,9 @@
 package bg.uni_plovdiv.fmi.tapetransfer.util
 
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.Currency
+import java.util.Date
 import java.util.Locale
 
 object Formatters {
@@ -15,4 +17,9 @@ object Formatters {
     }
 
     fun formatOrderNumber(id: Int): String = "№%04d".format(id)
+
+    fun formatDate(timestamp: Long): String {
+        val format = SimpleDateFormat("dd.MM.yyyy, HH:mm", bulgarian)
+        return format.format(Date(timestamp))
+    }
 }
