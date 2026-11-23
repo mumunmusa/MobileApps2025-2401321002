@@ -1,5 +1,6 @@
 package bg.uni_plovdiv.fmi.tapetransfer.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -25,6 +26,8 @@ data class TapeOrderEntity(
     val outputFormat: OutputFormat,
     val durationMinutes: Int,
     val price: Double,
+    @ColumnInfo(defaultValue = "1") val quantity: Int = 1,
+    @ColumnInfo(defaultValue = "0") val discountPercent: Int = 0,
     val status: OrderStatus = OrderStatus.PENDING,
     val notes: String = "",
     val createdByUserId: Int? = null,

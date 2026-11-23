@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,8 +17,11 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.MediaType
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OutputFormat
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.FragmentAddEditOrderBinding
+import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+import bg.uni_plovdiv.fmi.tapetransfer.util.PriceQuote
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class AddEditOrderFragment : Fragment() {
@@ -45,11 +49,58 @@ class AddEditOrderFragment : Fragment() {
 
         binding.buttonClose.setOnClickListener { findNavController().popBackStack() }
         binding.buttonSave.setOnClickListener { viewModel.save(readForm()) }
+        binding.buttonPriceList.setOnClickListener {
+            findNavController().navigate(R.id.action_addEditOrder_to_priceList)
+        }
+        binding.textPriceHint.setOnClickListener {
+            viewModel.isManualPrice = false
+            updateQuote()
+        }
+
+        binding.chipGroupMedia.setOnCheckedStateChangeListener { _, _ -> updateQuote() }
+        binding.editQuantity.doAfterTextChanged { updateQuote() }
+        binding.editDuration.doAfterTextChanged { updateQuote() }
+        binding.editPrice.doAfterTextChanged { text ->
+            val value = text.toString()
+            viewModel.isManualPrice = value.isNotBlank() && value != viewModel.lastAutoPrice
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state -> render(state) }
+                launch { viewModel.uiState.collect { state -> render(state) } }
+                launch { viewModel.priceList.collect { updateQuote() } }
             }
+        }
+    }
+
+    private fun updateQuote() {
+        val quote = viewModel.calculateQuote(
+            selectedMediaType(),
+            binding.editDuration.text.toString(),
+            binding.editQuantity.text.toString(),
+        )
+
+        if (quote == null) {
+            binding.textPriceHint.setText(R.string.price_hint_empty)
+            return
+        }
+
+        binding.textPriceHint.text = buildHint(quote)
+
+        if (!viewModel.isManualPrice) {
+            val priceText = String.format(Locale.US, "%.2f", quote.total)
+            viewModel.lastAutoPrice = priceText
+            binding.editPrice.setText(priceText)
+        }
+    }
+
+    private fun buildHint(quote: PriceQuote): String {
+        val rate = Formatters.formatPrice(quote.pricePerHour)
+        val total = Formatters.formatPrice(quote.total)
+        return if (quote.discountPercent > 0) {
+            getString(R.string.price_hint_discount, quote.hours, rate, quote.discountPercent, total)
+        } else {
+            getString(R.string.price_hint, quote.hours, rate, total)
         }
     }
 
@@ -62,6 +113,7 @@ class AddEditOrderFragment : Fragment() {
 
         binding.inputClientName.error = state.clientNameError?.let { getString(it) }
         binding.inputPhone.error = state.phoneError?.let { getString(it) }
+        binding.inputQuantity.error = state.quantityError?.let { getString(it) }
         binding.inputDuration.error = state.durationError?.let { getString(it) }
         binding.inputPrice.error = state.priceError?.let { getString(it) }
 
@@ -74,8 +126,9 @@ class AddEditOrderFragment : Fragment() {
     private fun fillForm(order: TapeOrderEntity) {
         binding.editClientName.setText(order.clientName)
         binding.editPhone.setText(order.clientPhone)
+        binding.editQuantity.setText(order.quantity.toString())
         binding.editDuration.setText(order.durationMinutes.toString())
-        binding.editPrice.setText(order.price.toString())
+        binding.editPrice.setText(String.format(Locale.US, "%.2f", order.price))
         binding.editNotes.setText(order.notes)
         binding.chipGroupMedia.check(chipIdFor(order.mediaType))
         binding.toggleFormat.check(buttonIdFor(order.outputFormat))
@@ -87,6 +140,7 @@ class AddEditOrderFragment : Fragment() {
             phone = binding.editPhone.text.toString(),
             mediaType = selectedMediaType(),
             outputFormat = selectedOutputFormat(),
+            quantityText = binding.editQuantity.text.toString(),
             durationText = binding.editDuration.text.toString(),
             priceText = binding.editPrice.text.toString(),
             notes = binding.editNotes.text.toString(),

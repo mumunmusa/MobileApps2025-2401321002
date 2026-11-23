@@ -34,4 +34,9 @@ object Formatters {
         val format = SimpleDateFormat("dd.MM.yyyy, HH:mm", bulgarian)
         return format.format(Date(timestamp))
     }
+
+    fun formatInitials(fullName: String): String {
+        val parts = fullName.trim().split(" ").filter { it.isNotBlank() }
+        return parts.take(2).joinToString("") { it.first().uppercase() }
+    }
 }

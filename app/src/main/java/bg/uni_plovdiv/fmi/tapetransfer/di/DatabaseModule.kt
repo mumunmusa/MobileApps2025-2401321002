@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.AppDatabase
+import bg.uni_plovdiv.fmi.tapetransfer.data.local.dao.PriceDao
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.dao.TapeOrderDao
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.dao.UserDao
 import dagger.Module
@@ -31,6 +32,9 @@ object DatabaseModule {
 
     @Provides
     fun provideTapeOrderDao(db: AppDatabase): TapeOrderDao = db.tapeOrderDao()
+
+    @Provides
+    fun providePriceDao(db: AppDatabase): PriceDao = db.priceDao()
 
     @Provides
     @Singleton

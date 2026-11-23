@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,6 +16,11 @@ import bg.uni_plovdiv.fmi.tapetransfer.R
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.FragmentDashboardBinding
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+import bg.uni_plovdiv.fmi.tapetransfer.util.QrCodeParser
+import com.google.zxing.client.android.Intents
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,6 +31,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: DashboardViewModel by viewModels()
+    private val scanLauncher = registerForActivityResult(ScanContract()) { result -> onScanResult(result) }
     private val adapter = OrderAdapter(
         onOrderClick = { order -> openOrderDetail(order.id) },
         onNextStepClick = { order -> viewModel.moveToNextStatus(order) },
@@ -46,6 +53,10 @@ class DashboardFragment : Fragment() {
         binding.recyclerOrders.adapter = adapter
 
         binding.fabNewOrder.setOnClickListener { openOrderForm(-1) }
+        binding.buttonScan.setOnClickListener { startScan() }
+        binding.buttonProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboard_to_profile)
+        }
         binding.cardActive.setOnClickListener { openOrdersList(showDone = false) }
         binding.cardDone.setOnClickListener { openOrdersList(showDone = true) }
         binding.cardRevenue.setOnClickListener {
@@ -72,6 +83,46 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun startScan() {
+        val options = ScanOptions()
+            .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            .setPrompt(getString(R.string.scan_prompt))
+            .setBeepEnabled(false)
+            .setOrientationLocked(false)
+        scanLauncher.launch(options)
+    }
+
+    private fun onScanResult(result: ScanIntentResult) {
+        if (result.contents != null) {
+            onCodeScanned(result.contents)
+            return
+        }
+
+        val noPermission = result.originalIntent?.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION) == true
+        if (noPermission) showMessage(getString(R.string.scan_no_permission))
+    }
+
+    private fun onCodeScanned(text: String?) {
+        val orderId = QrCodeParser.parseOrderId(text)
+        if (orderId == null) {
+            showMessage(getString(R.string.scan_not_tapetransfer))
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (viewModel.orderExists(orderId)) {
+                openOrderDetail(orderId)
+            } else {
+                showMessage(getString(R.string.scan_order_not_found, Formatters.formatOrderNumber(orderId)))
+            }
+        }
+    }
+
+    private fun showMessage(message: String) {
+        if (_binding == null) return
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun openOrdersList(showDone: Boolean) {

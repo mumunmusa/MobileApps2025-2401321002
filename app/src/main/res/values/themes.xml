@@ -34,6 +34,11 @@
 
     <style name="Theme.TapeTransfer" parent="Base.Theme.TapeTransfer" />
 
+    <style name="ThemeOverlay.TapeTransfer.OnLime" parent="">
+        <item name="colorOnSurface">@color/ink</item>
+        <item name="colorOnSurfaceVariant">@color/ink</item>
+    </style>
+
     <style name="ShapeAppearance.TapeTransfer.Small" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
@@ -62,14 +67,14 @@
         <item name="android:textSize">40sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">-0.03</item>
-        <item name="android:textColor">@color/ink</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="TextAppearance.TapeTransfer.Title" parent="TextAppearance.Material3.HeadlineMedium">
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">-0.02</item>
-        <item name="android:textColor">@color/ink</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
 </resources>

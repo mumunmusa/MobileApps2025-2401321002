@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -24,6 +23,8 @@ import bg.uni_plovdiv.fmi.tapetransfer.util.ClientReport
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
 import bg.uni_plovdiv.fmi.tapetransfer.util.LabelPrinter
 import bg.uni_plovdiv.fmi.tapetransfer.util.QrCodeGenerator
+import com.google.android.material.R as MaterialR
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -99,6 +100,13 @@ class OrderDetailFragment : Fragment() {
         binding.textFormat.text = getString(R.string.detail_format_value, order.outputFormat.displayName)
         binding.textDuration.text = getString(R.string.detail_duration_value, order.durationMinutes)
         binding.textPrice.text = Formatters.formatPrice(order.price)
+        binding.textQuantity.text = resources.getQuantityString(
+            R.plurals.detail_quantity,
+            order.quantity,
+            order.quantity,
+        )
+        binding.textDiscount.text = getString(R.string.detail_discount, order.discountPercent)
+        binding.textDiscount.visibility = if (order.discountPercent > 0) View.VISIBLE else View.GONE
 
         val step = when (order.status) {
             OrderStatus.PENDING -> 1
@@ -218,8 +226,8 @@ class OrderDetailFragment : Fragment() {
     }
 
     private fun colorSegment(segment: View, filled: Boolean) {
-        val colorRes = if (filled) R.color.ink else R.color.outline_variant_light
-        segment.background.mutate().setTint(ContextCompat.getColor(requireContext(), colorRes))
+        val colorAttr = if (filled) MaterialR.attr.colorOnSurface else MaterialR.attr.colorOutlineVariant
+        segment.background.mutate().setTint(MaterialColors.getColor(segment, colorAttr))
     }
 
     override fun onDestroyView() {

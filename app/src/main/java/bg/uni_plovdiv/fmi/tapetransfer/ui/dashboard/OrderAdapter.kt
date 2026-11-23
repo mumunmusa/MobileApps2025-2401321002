@@ -3,7 +3,6 @@ package bg.uni_plovdiv.fmi.tapetransfer.ui.dashboard
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +11,8 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.ItemOrderBinding
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
+import com.google.android.material.R as MaterialR
+import com.google.android.material.color.MaterialColors
 
 class OrderAdapter(
     private val onOrderClick: (TapeOrderEntity) -> Unit,
@@ -73,8 +74,8 @@ class OrderAdapter(
         }
 
         private fun colorSegment(segment: View, filled: Boolean) {
-            val colorRes = if (filled) R.color.ink else R.color.outline_variant_light
-            segment.background.mutate().setTint(ContextCompat.getColor(segment.context, colorRes))
+            val colorAttr = if (filled) MaterialR.attr.colorOnSurface else MaterialR.attr.colorOutlineVariant
+            segment.background.mutate().setTint(MaterialColors.getColor(segment, colorAttr))
         }
     }
 

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,6 +57,10 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             _userName.value = authRepository.getCurrentUser()?.fullName ?: ""
         }
+    }
+
+    suspend fun orderExists(orderId: Int): Boolean {
+        return orderRepository.orderById(orderId).first() != null
     }
 
     fun selectFilter(status: OrderStatus?) {

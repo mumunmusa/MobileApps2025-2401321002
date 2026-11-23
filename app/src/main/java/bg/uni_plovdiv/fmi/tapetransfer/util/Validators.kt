@@ -22,6 +22,10 @@ object Validators {
 
     fun isValidPrice(price: Double?): Boolean = price != null && price > 0.0
 
+    fun isValidQuantity(quantity: Int?): Boolean = quantity != null && quantity in 1..999
+
+    fun isValidDiscount(percent: Int?): Boolean = percent != null && percent in 0..90
+
     fun isValidDuration(minutes: Int?): Boolean = minutes != null && minutes > 0
 
     fun isValidPhone(phone: String): Boolean {

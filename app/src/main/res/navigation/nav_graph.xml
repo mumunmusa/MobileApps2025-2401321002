@@ -39,6 +39,23 @@
         <action
             android:id="@+id/action_dashboard_to_revenue"
             app:destination="@id/revenueFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_profile"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.profile.ProfileFragment"
+        android:label="@string/profile_title">
+        <action
+            android:id="@+id/action_profile_to_priceList"
+            app:destination="@id/priceListFragment" />
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -79,6 +96,14 @@
             android:name="orderId"
             android:defaultValue="-1"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_addEditOrder_to_priceList"
+            app:destination="@id/priceListFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/priceListFragment"
+        android:name="bg.uni_plovdiv.fmi.tapetransfer.ui.prices.PriceListFragment"
+        android:label="@string/price_list_title" />
 
 </navigation>

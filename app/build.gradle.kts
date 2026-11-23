@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.zxing.core)
     implementation(libs.androidx.print)
 
+    // QR code scanning (camera)
+    implementation(libs.zxing.android.embedded)
+
     // Memory leak detection (debug builds only)
     debugImplementation(libs.leakcanary)
 

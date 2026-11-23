@@ -7,7 +7,10 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.session.SessionManager
 import bg.uni_plovdiv.fmi.tapetransfer.util.PasswordHasher
 import bg.uni_plovdiv.fmi.tapetransfer.util.Validators
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -34,6 +37,18 @@ class AuthRepository @Inject constructor(
 ) {
 
     val pendingUsers: Flow<List<UserEntity>> = userDao.observePendingUsers()
+
+    val approvedUsers: Flow<List<UserEntity>> = userDao.observeApprovedUsers()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentUser: Flow<UserEntity?> = sessionManager.currentUserId.flatMapLatest { userId ->
+        if (userId == null) flowOf(null) else userDao.observeById(userId)
+    }
+
+    suspend fun hasActiveSession(): Boolean {
+        val user = getCurrentUser() ?: return false
+        return user.isApproved
+    }
 
     suspend fun getCurrentUser(): UserEntity? {
         val userId = sessionManager.currentUserId.first() ?: return null
@@ -71,6 +86,10 @@ class AuthRepository @Inject constructor(
 
     suspend fun approveUser(user: UserEntity) {
         userDao.update(user.copy(isApproved = true))
+    }
+
+    suspend fun deleteUser(user: UserEntity) {
+        userDao.delete(user)
     }
 
     suspend fun logout() {

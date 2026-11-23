@@ -65,6 +65,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun render(state: LoginUiState) {
+        val hideForm = state.isCheckingSession || state.isLoggedIn
+        binding.root.visibility = if (hideForm) View.INVISIBLE else View.VISIBLE
+
         binding.buttonLogin.isEnabled = !state.isLoading
         binding.buttonLogin.text = if (state.isLoading) {
             getString(R.string.login_in_progress)
@@ -79,7 +82,8 @@ class LoginFragment : Fragment() {
             binding.textError.visibility = View.GONE
         }
 
-        if (state.isLoggedIn) {
+        val isOnLoginScreen = findNavController().currentDestination?.id == R.id.loginFragment
+        if (state.isLoggedIn && isOnLoginScreen) {
             findNavController().navigate(R.id.action_login_to_dashboard)
             viewModel.onNavigatedToDashboard()
         }

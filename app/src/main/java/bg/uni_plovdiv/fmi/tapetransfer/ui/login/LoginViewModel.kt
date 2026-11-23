@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class LoginUiState(
+    val isCheckingSession: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: Int? = null,
     val isLoggedIn: Boolean = false,
@@ -22,8 +23,15 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow(LoginUiState(isCheckingSession = true))
     val uiState: StateFlow<LoginUiState> = _uiState
+
+    init {
+        viewModelScope.launch {
+            val loggedIn = authRepository.hasActiveSession()
+            _uiState.value = LoginUiState(isLoggedIn = loggedIn)
+        }
+    }
 
     fun login(username: String, password: String) {
         if (username.isBlank() || password.isBlank()) {
