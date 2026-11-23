@@ -1,5 +1,8 @@
 package bg.uni_plovdiv.fmi.tapetransfer.ui.detail
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +20,7 @@ import bg.uni_plovdiv.fmi.tapetransfer.R
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import bg.uni_plovdiv.fmi.tapetransfer.databinding.FragmentOrderDetailBinding
+import bg.uni_plovdiv.fmi.tapetransfer.util.ClientReport
 import bg.uni_plovdiv.fmi.tapetransfer.util.Formatters
 import bg.uni_plovdiv.fmi.tapetransfer.util.LabelPrinter
 import bg.uni_plovdiv.fmi.tapetransfer.util.QrCodeGenerator
@@ -55,6 +59,8 @@ class OrderDetailFragment : Fragment() {
         binding.buttonNextStep.setOnClickListener { viewModel.moveToNextStatus() }
         binding.buttonDelete.setOnClickListener { confirmDelete() }
         binding.cardQrLabel.setOnClickListener { showLargeQr() }
+        binding.buttonSms.setOnClickListener { sendSms() }
+        binding.buttonShare.setOnClickListener { shareReport() }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -112,6 +118,7 @@ class OrderDetailFragment : Fragment() {
         }
 
         showQrLabel(order)
+        binding.buttonSms.visibility = if (order.clientPhone.isBlank()) View.GONE else View.VISIBLE
 
         when (order.status) {
             OrderStatus.PENDING -> {
@@ -141,6 +148,35 @@ class OrderDetailFragment : Fragment() {
             order.mediaType.displayName,
             order.outputFormat.displayName,
         )
+    }
+
+    private fun sendSms() {
+        val order = viewModel.order.value ?: return
+        val message = ClientReport.buildMessage(requireContext(), order)
+
+        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(order.clientPhone)))
+        intent.putExtra("sms_body", message)
+
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), R.string.error_no_sms_app, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun shareReport() {
+        val order = viewModel.order.value ?: return
+        val message = ClientReport.buildMessage(requireContext(), order)
+
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+        intent.putExtra(
+            Intent.EXTRA_SUBJECT,
+            getString(R.string.share_subject, Formatters.formatOrderNumber(order.id)),
+        )
+
+        startActivity(Intent.createChooser(intent, getString(R.string.share_chooser_title)))
     }
 
     private fun showLargeQr() {

@@ -388,6 +388,43 @@
             android:layout_weight="1"
             android:minHeight="24dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSms"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="@string/notify_sms"
+                android:textColor="?attr/colorOnSurface"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_sms"
+                app:iconGravity="textStart"
+                app:iconTint="?attr/colorOnSurface"
+                app:strokeColor="?attr/colorOutline" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonShare"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:text="@string/notify_share"
+                android:textColor="?attr/colorOnSurface"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_share"
+                app:iconGravity="textStart"
+                app:iconTint="?attr/colorOnSurface"
+                app:strokeColor="?attr/colorOutline" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonNextStep"
             style="@style/Widget.TapeTransfer.Button.Lime"

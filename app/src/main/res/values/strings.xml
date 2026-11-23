@@ -95,4 +95,12 @@
     <string name="cd_qr_code">QR код на поръчката</string>
     <string name="qr_label_info">%1$s → %2$s</string>
     <string name="qr_print">Печат</string>
+    <string name="notify_sms">SMS</string>
+    <string name="notify_share">Сподели</string>
+    <string name="share_chooser_title">Изпрати отчет чрез</string>
+    <string name="share_subject">Поръчка %1$s – TapeTransfer</string>
+    <string name="error_no_sms_app">Няма приложение за SMS</string>
+    <string name="report_pending">Здравейте, %1$s! Приехме вашата касета %2$s за дигитализация в %3$s.\nПоръчка %4$s · %5$d мин · Цена: %6$s\nЩе ви уведомим, когато е готова.\nTapeTransfer</string>
+    <string name="report_in_progress">Здравейте, %1$s! Касетата ви %2$s (поръчка %4$s) в момента се дигитализира в %3$s. Очаквайте я скоро.\nTapeTransfer</string>
+    <string name="report_done">Здравейте, %1$s! Поръчка %4$s е готова – вашият %2$s запис е прехвърлен в %3$s.\nСума за плащане: %6$s\nМожете да я вземете от студиото.\nTapeTransfer</string>
 </resources>
