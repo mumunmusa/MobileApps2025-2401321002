@@ -43,8 +43,11 @@ class RevenueFragment : Fragment() {
         binding.recyclerMonths.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerMonths.adapter = adapter
 
-        binding.textMonthLabel.text = getString(R.string.revenue_month) + " · " +
-            Formatters.formatMonth(System.currentTimeMillis())
+        binding.textMonthLabel.text = getString(
+            R.string.revenue_month_label,
+            getString(R.string.revenue_month),
+            Formatters.formatMonth(System.currentTimeMillis()),
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

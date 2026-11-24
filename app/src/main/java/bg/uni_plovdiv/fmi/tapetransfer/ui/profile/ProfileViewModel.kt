@@ -36,11 +36,12 @@ class ProfileViewModel @Inject constructor(
             authRepository.approvedUsers,
         ) { user, pending, approved ->
             val isAdmin = user?.role == UserRole.ADMIN
+            val currentUserId = user?.id
             ProfileUiState(
                 user = user,
                 isAdmin = isAdmin,
                 pendingUsers = if (isAdmin) pending else emptyList(),
-                employees = if (isAdmin) approved.filter { it.id != user?.id } else emptyList(),
+                employees = if (isAdmin) approved.filter { it.id != currentUserId } else emptyList(),
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProfileUiState())
 

@@ -18,7 +18,7 @@ class PriceAdapter(
     var canEdit: Boolean = false
         set(value) {
             field = value
-            notifyDataSetChanged()
+            notifyItemRangeChanged(0, itemCount)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PriceViewHolder {

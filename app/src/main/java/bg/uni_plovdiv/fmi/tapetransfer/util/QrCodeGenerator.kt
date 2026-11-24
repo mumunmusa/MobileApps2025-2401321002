@@ -2,6 +2,7 @@ package bg.uni_plovdiv.fmi.tapetransfer.util
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.core.graphics.createBitmap
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -32,7 +33,7 @@ object QrCodeGenerator {
             }
         }
 
-        val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(sizePx, sizePx)
         bitmap.setPixels(pixels, 0, sizePx, 0, 0, sizePx, sizePx)
         return bitmap
     }

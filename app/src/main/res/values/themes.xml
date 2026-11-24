@@ -63,13 +63,6 @@
         <item name="cornerRadius">18dp</item>
     </style>
 
-    <style name="TextAppearance.TapeTransfer.Headline" parent="TextAppearance.Material3.DisplaySmall">
-        <item name="android:textSize">40sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">-0.03</item>
-        <item name="android:textColor">?attr/colorOnSurface</item>
-    </style>
-
     <style name="TextAppearance.TapeTransfer.Title" parent="TextAppearance.Material3.HeadlineMedium">
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>

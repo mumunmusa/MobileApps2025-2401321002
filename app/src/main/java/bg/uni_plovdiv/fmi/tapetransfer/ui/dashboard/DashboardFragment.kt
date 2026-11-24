@@ -52,7 +52,7 @@ class DashboardFragment : Fragment() {
         binding.recyclerOrders.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerOrders.adapter = adapter
 
-        binding.fabNewOrder.setOnClickListener { openOrderForm(-1) }
+        binding.fabNewOrder.setOnClickListener { openNewOrderForm() }
         binding.buttonScan.setOnClickListener { startScan() }
         binding.buttonProfile.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_profile)
@@ -137,10 +137,8 @@ class DashboardFragment : Fragment() {
         findNavController().navigate(R.id.action_dashboard_to_orderDetail, args)
     }
 
-    private fun openOrderForm(orderId: Int) {
-        val args = Bundle()
-        args.putInt("orderId", orderId)
-        findNavController().navigate(R.id.action_dashboard_to_addEditOrder, args)
+    private fun openNewOrderForm() {
+        findNavController().navigate(R.id.action_dashboard_to_addEditOrder)
     }
 
     private fun render(state: DashboardUiState) {

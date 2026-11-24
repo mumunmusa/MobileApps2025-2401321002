@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -162,7 +163,7 @@ class OrderDetailFragment : Fragment() {
         val order = viewModel.order.value ?: return
         val message = ClientReport.buildMessage(requireContext(), order)
 
-        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(order.clientPhone)))
+        val intent = Intent(Intent.ACTION_SENDTO, "smsto:${Uri.encode(order.clientPhone)}".toUri())
         intent.putExtra("sms_body", message)
 
         try {

@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import androidx.core.graphics.createBitmap
 import androidx.print.PrintHelper
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 
@@ -23,7 +24,7 @@ object LabelPrinter {
     }
 
     fun createLabel(order: TapeOrderEntity): Bitmap {
-        val label = Bitmap.createBitmap(LABEL_WIDTH, LABEL_HEIGHT, Bitmap.Config.ARGB_8888)
+        val label = createBitmap(LABEL_WIDTH, LABEL_HEIGHT)
         val canvas = Canvas(label)
         canvas.drawColor(Color.WHITE)
 

@@ -4,7 +4,6 @@ import bg.uni_plovdiv.fmi.tapetransfer.data.local.dao.TapeOrderDao
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.OrderStatus
 import bg.uni_plovdiv.fmi.tapetransfer.data.local.entity.TapeOrderEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,10 +33,6 @@ class TapeOrderRepository @Inject constructor(
 ) {
 
     val allOrders: Flow<List<TapeOrderEntity>> = dao.getAllOrders()
-
-    val summary: Flow<OrderSummary> = allOrders.map { orders -> calculateSummary(orders) }
-
-    fun ordersByStatus(status: OrderStatus): Flow<List<TapeOrderEntity>> = dao.getOrdersByStatus(status)
 
     fun orderById(id: Int): Flow<TapeOrderEntity?> = dao.getOrderById(id)
 
@@ -78,8 +73,6 @@ class TapeOrderRepository @Inject constructor(
         }
 
         fun isInPeriod(order: TapeOrderEntity, period: RevenuePeriod, now: Long): Boolean {
-            if (period == RevenuePeriod.ALL) return true
-
             val orderDate = Calendar.getInstance()
             orderDate.timeInMillis = order.completedAt ?: order.createdAt
             val today = Calendar.getInstance()
@@ -112,14 +105,6 @@ class TapeOrderRepository @Inject constructor(
                     )
                 }
                 .sortedWith(compareByDescending<MonthRevenue> { it.year }.thenByDescending { it.month })
-        }
-
-        fun filterByQuery(orders: List<TapeOrderEntity>, query: String): List<TapeOrderEntity> {
-            val text = query.trim()
-            if (text.isEmpty()) return orders
-            return orders.filter {
-                it.clientName.contains(text, ignoreCase = true) || it.clientPhone.contains(text)
-            }
         }
     }
 }
